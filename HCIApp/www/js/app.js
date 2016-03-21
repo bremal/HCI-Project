@@ -58,6 +58,30 @@ angular.module('SimpleRESTIonic', ['ionic', 'backand', 'SimpleRESTIonic.controll
                         templateUrl: 'templates/tab-home.html'
                     }
                 }
+            })
+            .state('tab.thingstodo', {
+                url: '/thingstodo',
+                views: {
+                    'tab-thingstodo': {
+                        templateUrl: 'templates/tab-things.html'
+                    }
+                }
+            })
+            .state('tab.groups', {
+                url: '/groups',
+                views: {
+                    'tab-groups': {
+                        templateUrl: 'templates/groups.html'
+                    }
+                }
+            })
+            .state('tab.forum', {
+                url: '/forum',
+                views: {
+                    'tab-forum': {
+                        templateUrl: 'templates/forum.html'
+                    }
+                }
             });
 
         $urlRouterProvider.otherwise('/tabs/dashboard');

@@ -1,4 +1,4 @@
-<ion-view view-title="Home">
+<ion-view view-title="Things to Do">
     <ion-content class="padding has-header">
 				<div class="bar bar-header item-input-inset">
 			  	<label class="item-input-wrapper">
