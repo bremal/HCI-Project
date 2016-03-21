@@ -63,7 +63,8 @@ angular.module('SimpleRESTIonic', ['ionic', 'backand', 'SimpleRESTIonic.controll
                 url: '/thingstodo',
                 views: {
                     'tab-thingstodo': {
-                        templateUrl: 'templates/tab-things.html'
+                        templateUrl: 'templates/tab-things.html',
+												controller: 'ThingsToDoCtrl'
                     }
                 }
             })

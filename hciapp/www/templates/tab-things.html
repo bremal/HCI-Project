@@ -9,14 +9,19 @@
 			   	 Cancel
 			  	</button>
 				</div>
-				<div class="list card">
+        <div class="bar bar-subheader">
+            <div class="list card" ng-repeat="object in vm.data"
+                 ng-class="{'active':vm.isCurrent(object.id)}">
+                <div class="item item-icon-right item-icon-left">
+                    <i class="ion-compose icon" ng-click="vm.setEdited(object)"></i>
 
-				  <div class="item item-body">
-				    <p>
-				      
-				    </p>
-				  </div>
-
-				</div>
+                    <h2 class="text-center">{{object.name}}</h2>
+                    <i class="icon ion-close-round" ng-click="vm.delete(object.id)"></i>
+                </div>
+                <div class="item item-body">
+                    
+                </div>
+            </div>
+        </div>
 		</ion-content>
 </ion-view>
