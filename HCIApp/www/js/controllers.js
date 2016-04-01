@@ -37,7 +37,7 @@ angular.module('SimpleRESTIonic.controllers', [])
         login.anonymousLogin = anonymousLogin;
     })
 
-    .controller('DashboardCtrl', function (ItemsModel, $rootScope) {
+   /* .controller('DashboardCtrl', function (ItemsModel, $rootScope) {
         var vm = this;
 
         function goToBackand() {
@@ -133,98 +133,84 @@ angular.module('SimpleRESTIonic.controllers', [])
         initCreateForm();
         getAll();
 
-    })
+    })*/
 		
-    .controller('ThingsToDoCtrl', function (BusinessModel, $rootScope) {
-        var vm = this;
+		.directive('searchBar', [function () {
+			return {
+				scope: {
+					ngModel: '='
+				},
+				require: ['^ionNavBar', '?ngModel'],
+				restrict: 'E',
+				replace: true,
+				template: '<ion-nav-buttons side="right">'+
+								'<div class="searchBar">'+
+									'<div class="searchTxt" ng-show="ngModel.show">'+
+								  		'<div class="bgdiv"></div>'+
+								  		'<div class="bgtxt">'+
+								  			'<input type="text" placeholder="Search" ng-model="ngModel.txt">'+
+								  		'</div>'+
+							  		'</div>'+
+								  	'<i class="icon placeholder-icon" ng-click="ngModel.txt=\'\';ngModel.show=!ngModel.show"></i>'+
+								'</div>'+
+							'</ion-nav-buttons>',
+
+				compile: function (element, attrs) {
+					var icon=attrs.icon
+							|| (ionic.Platform.isAndroid() && 'ion-android-search')
+							|| (ionic.Platform.isIOS()     && 'ion-ios7-search')
+							|| 'ion-search';
+					angular.element(element[0].querySelector('.icon')).addClass(icon);
+	
+					return function($scope, $element, $attrs, ctrls) {
+						var navBarCtrl = ctrls[0];
+						$scope.navElement = $attrs.side === 'right' ? navBarCtrl.rightButtonsElement : navBarCtrl.leftButtonsElement;
+		
+					};
+				},
+				controller: ['$scope','$ionicNavBarDelegate', function($scope,$ionicNavBarDelegate){
+					var title, definedClass;
+					$scope.$watch('ngModel.show', function(showing, oldVal, scope) {
+						if(showing!==oldVal) {
+							if(showing) {
+								if(!definedClass) {
+									var numicons=$scope.navElement.children().length;
+									angular.element($scope.navElement[0].querySelector('.searchBar')).addClass('numicons'+numicons);
+								}
+				
+								title = $ionicNavBarDelegate.title;
+								$ionicNavBarDelegate.title('');
+							} else {
+								$ionicNavBarDelegate.title(title);
+							}
+						} else if (!title) {
+							title = $ionicNavBarDelegate.title;
+						}
+					});
+				}]
+			};
+		}])
+		
+		
+    .controller('ThingsToDoCtrl', function (BusinessModel, $scope, $rootScope) {
+			$scope.vm = this;
 
         function getAll() {
            	BusinessModel.all()
                 .then(function (result) {
-                    vm.data = result.data.data;
+                    $scope.vm.data = result.data.data;
+										console.log($scope.vm.data);
                 });
         }
+				
 
       	function clearData(){
-            vm.data = null;
+            $scope.vm.data = null;
         }
 
-        function create(object) {
-            BusinessModel.create(object)
-                .then(function (result) {
-                    cancelCreate();
-                    getAll();
-                });
-        }
 
-        function update(object) {
-            BusinessModel.update(object.id, object)
-                .then(function (result) {
-                    cancelEditing();
-                    getAll();
-                });
-        }
+        $scope.vm.getAll = getAll;
 
-        function deleteObject(id) {
-            BusinessModel.delete(id)
-                .then(function (result) {
-                    cancelEditing();
-                    getAll();
-                });
-        }
-
-        function initCreateForm() {
-            vm.newObject = {name: '', description: ''};
-        }
-
-        function setEdited(object) {
-            vm.edited = angular.copy(object);
-            vm.isEditing = true;
-        }
-
-        function isCurrent(id) {
-            return vm.edited !== null && vm.edited.id === id;
-        }
-
-        function cancelEditing() {
-            vm.edited = null;
-            vm.isEditing = false;
-        }
-
-        function cancelCreate() {
-            initCreateForm();
-            vm.isCreating = false;
-        }
-
-        vm.objects = [];
-        vm.edited = null;
-        vm.isEditing = false;
-        vm.isCreating = false;
-        vm.getAll = getAll;
-        vm.create = create;
-        vm.update = update;
-        vm.delete = deleteObject;
-        vm.setEdited = setEdited;
-        vm.isCurrent = isCurrent;
-        vm.cancelEditing = cancelEditing;
-        vm.cancelCreate = cancelCreate;
-        vm.goToBackand = goToBackand;
-        vm.isAuthorized = false;
-
-        $rootScope.$on('authorized', function () {
-            vm.isAuthorized = true;
-            getAll();
-        });
-
-        $rootScope.$on('logout', function () {
-            clearData();
-        });
-
-        if(!vm.isAuthorized){
-            $rootScope.$broadcast('logout');
-        }
-
-        initCreateForm();
         getAll();
 
     });
