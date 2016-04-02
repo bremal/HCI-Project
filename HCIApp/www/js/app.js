@@ -68,6 +68,15 @@ angular.module('SimpleRESTIonic', ['ionic', 'backand', 'SimpleRESTIonic.controll
                     }
                 }
             })
+            .state('tab.things-detail', {
+                url: '/thingstodo/:businessId',
+                views: {
+                    'tab-thingstodo': {
+                        templateUrl: 'templates/tab-things-detail.html',
+											controller: 'ThingsToDoDetailCtrl'
+                    }
+                }
+            })
             .state('tab.groups', {
                 url: '/groups',
                 views: {

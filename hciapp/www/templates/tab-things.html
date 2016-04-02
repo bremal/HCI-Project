@@ -2,7 +2,7 @@
 	<search-bar ng-model="search"></search-bar>
      <ion-content class="has-header padding">
 				
-            <div class="list card" ng-repeat="object in vm.data|filter:search.txt">
+            <div class="list card" ng-repeat="object in vm.data|filter:search.txt" ng-click="viewDetails(object)">
 
                     <div class="item item-divider">{{object.name}}</div>
 										  <div class="item item-text-wrap">

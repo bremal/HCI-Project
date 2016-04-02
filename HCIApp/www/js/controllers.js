@@ -192,14 +192,32 @@ angular.module('SimpleRESTIonic.controllers', [])
 		}])
 		
 		
-    .controller('ThingsToDoCtrl', function (BusinessModel, $scope, $rootScope) {
+    .controller('ThingsToDoDetailCtrl', function (BusinessModel, $stateParams, $state, $scope, $rootScope) {
+			$scope.business = this;
+			//$scope.state = $state;
+			console.log($scope.business.data);
+      function fetchObject(id) {
+          BusinessModel.fetch(id)
+              .then(function (result) {
+								console.log(result.data.name);
+								$scope.business = result.data;
+								console.log($scope.business.name);
+              });
+      }
+			console.log("calling the function");
+			console.log($stateParams.broadcastId);
+			fetchObject($stateParams.businessId);
+
+    })
+		
+		
+    .controller('ThingsToDoCtrl', function (BusinessModel, $state, $scope, $rootScope) {
 			$scope.vm = this;
 
         function getAll() {
            	BusinessModel.all()
                 .then(function (result) {
                     $scope.vm.data = result.data.data;
-										console.log($scope.vm.data);
                 });
         }
 				
@@ -207,6 +225,12 @@ angular.module('SimpleRESTIonic.controllers', [])
       	function clearData(){
             $scope.vm.data = null;
         }
+				
+				$scope.viewDetails = function(object) {
+					console.log(object.id);
+					
+					$state.go('tab.things-detail', {'businessId': object.id});
+				}
 
 
         $scope.vm.getAll = getAll;
