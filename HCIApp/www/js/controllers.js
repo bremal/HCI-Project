@@ -194,18 +194,12 @@ angular.module('SimpleRESTIonic.controllers', [])
 		
     .controller('ThingsToDoDetailCtrl', function (BusinessModel, $stateParams, $state, $scope, $rootScope) {
 			$scope.business = this;
-			//$scope.state = $state;
-			console.log($scope.business.data);
       function fetchObject(id) {
           BusinessModel.fetch(id)
               .then(function (result) {
-								console.log(result.data.name);
 								$scope.business = result.data;
-								console.log($scope.business.name);
               });
       }
-			console.log("calling the function");
-			console.log($stateParams.broadcastId);
 			fetchObject($stateParams.businessId);
 
     })
