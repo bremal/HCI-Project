@@ -59,6 +59,14 @@ angular.module('SimpleRESTIonic', ['ionic', 'backand', 'SimpleRESTIonic.controll
                     }
                 }
             })
+						.state('tab.preferences', {
+							url: '/preferences',
+							views: {
+								'tab-home': {
+										templateUrl: 'templates/preferences.html'
+								}
+							}
+						})
             .state('tab.thingstodo', {
                 url: '/thingstodo',
                 views: {
