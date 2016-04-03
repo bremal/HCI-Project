@@ -5,11 +5,11 @@
 			
 		<h3>Reviews</h3>
 			<div>{{business.reviews}}</div>
-		  <div class="list card" ng-repeat="review in {{business.reviews}}">
+		  <div class="list card" ng-repeat="review in reviews">
         <div class="item item-divider">{{review.user}}</div>
 				  <div class="item item-text-wrap">
 				    {review.content}}
 				  </div>
 			</div>
-	</ion-contenet>
+	</ion-content>
 </ion-view>

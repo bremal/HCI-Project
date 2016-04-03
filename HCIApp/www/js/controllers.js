@@ -198,10 +198,12 @@ angular.module('SimpleRESTIonic.controllers', [])
           BusinessModel.fetch(id)
               .then(function (result) {
 								$scope.business = result.data;
+								console.log($scope.business);
               });
       }
 			fetchObject($stateParams.businessId);
-
+			$scope.reviews = $scope.business.reviews;
+			console.log($scope.reviews);
     })
 		
 		
@@ -212,6 +214,7 @@ angular.module('SimpleRESTIonic.controllers', [])
            	BusinessModel.all()
                 .then(function (result) {
                     $scope.vm.data = result.data.data;
+
                 });
         }
 				
