@@ -37,7 +37,7 @@ angular.module('SimpleRESTIonic.controllers', [])
         login.anonymousLogin = anonymousLogin;
     })
 
-    .controller('DashboardCtrl', function (ItemsModel, $rootScope) {
+   /* .controller('DashboardCtrl', function (ItemsModel, $rootScope) {
         var vm = this;
 
         function goToBackand() {
@@ -133,5 +133,105 @@ angular.module('SimpleRESTIonic.controllers', [])
         initCreateForm();
         getAll();
 
-    });
+    })*/
+		
+		.directive('searchBar', [function () {
+			return {
+				scope: {
+					ngModel: '='
+				},
+				require: ['^ionNavBar', '?ngModel'],
+				restrict: 'E',
+				replace: true,
+				template: '<ion-nav-buttons side="right">'+
+								'<div class="searchBar">'+
+									'<div class="searchTxt" ng-show="ngModel.show">'+
+								  		'<div class="bgdiv"></div>'+
+								  		'<div class="bgtxt">'+
+								  			'<input type="text" placeholder="Search" ng-model="ngModel.txt">'+
+								  		'</div>'+
+							  		'</div>'+
+								  	'<i class="icon placeholder-icon" ng-click="ngModel.txt=\'\';ngModel.show=!ngModel.show"></i>'+
+								'</div>'+
+							'</ion-nav-buttons>',
 
+				compile: function (element, attrs) {
+					var icon=attrs.icon
+							|| (ionic.Platform.isAndroid() && 'ion-android-search')
+							|| (ionic.Platform.isIOS()     && 'ion-ios7-search')
+							|| 'ion-search';
+					angular.element(element[0].querySelector('.icon')).addClass(icon);
+	
+					return function($scope, $element, $attrs, ctrls) {
+						var navBarCtrl = ctrls[0];
+						$scope.navElement = $attrs.side === 'right' ? navBarCtrl.rightButtonsElement : navBarCtrl.leftButtonsElement;
+		
+					};
+				},
+				controller: ['$scope','$ionicNavBarDelegate', function($scope,$ionicNavBarDelegate){
+					var title, definedClass;
+					$scope.$watch('ngModel.show', function(showing, oldVal, scope) {
+						if(showing!==oldVal) {
+							if(showing) {
+								if(!definedClass) {
+									var numicons=$scope.navElement.children().length;
+									angular.element($scope.navElement[0].querySelector('.searchBar')).addClass('numicons'+numicons);
+								}
+				
+								title = $ionicNavBarDelegate.title;
+								$ionicNavBarDelegate.title('');
+							} else {
+								$ionicNavBarDelegate.title(title);
+							}
+						} else if (!title) {
+							title = $ionicNavBarDelegate.title;
+						}
+					});
+				}]
+			};
+		}])
+		
+		
+    .controller('ThingsToDoDetailCtrl', function (BusinessModel, $stateParams, $state, $scope, $rootScope) {
+			$scope.business = this;
+      function fetchObject(id) {
+          BusinessModel.fetch(id)
+              .then(function (result) {
+								$scope.business = result.data;
+								console.log($scope.business);
+              });
+      }
+			fetchObject($stateParams.businessId);
+			$scope.reviews = $scope.business.reviews;
+			console.log($scope.reviews);
+    })
+		
+		
+    .controller('ThingsToDoCtrl', function (BusinessModel, $state, $scope, $rootScope) {
+			$scope.vm = this;
+
+        function getAll() {
+           	BusinessModel.all()
+                .then(function (result) {
+                    $scope.vm.data = result.data.data;
+
+                });
+        }
+				
+
+      	function clearData(){
+            $scope.vm.data = null;
+        }
+				
+				$scope.viewDetails = function(object) {
+					console.log(object.id);
+					
+					$state.go('tab.things-detail', {'businessId': object.id});
+				}
+
+
+        $scope.vm.getAll = getAll;
+
+        getAll();
+
+    });

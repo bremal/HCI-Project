@@ -1,0 +1,15 @@
+<ion-view view-title="Details">
+	<ion-content class="has-header padding">
+		<h1>{{business.name}}</h2>
+			<div>{{business.description}}</div>
+			
+		<h3>Reviews</h3>
+			<div>{{business.reviews}}</div>
+		  <div class="list card" ng-repeat="review in reviews">
+        <div class="item item-divider">{{review.user}}</div>
+				  <div class="item item-text-wrap">
+				    {review.content}}
+				  </div>
+			</div>
+	</ion-content>
+</ion-view>
