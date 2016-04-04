@@ -76,11 +76,30 @@ angular.module('SimpleRESTIonic', ['ionic', 'backand', 'SimpleRESTIonic.controll
                     }
                 }
             })
+            .state('tab.things-detail', {
+                url: '/thingstodo/:businessId',
+                views: {
+                    'tab-thingstodo': {
+                        templateUrl: 'templates/tab-things-detail.html',
+											controller: 'ThingsToDoDetailCtrl'
+                    }
+                }
+            })
             .state('tab.groups', {
                 url: '/groups',
                 views: {
                     'tab-groups': {
-                        templateUrl: 'templates/groups.html'
+                        templateUrl: 'templates/groups.html',
+											controller: 'GroupCtrl'
+                    }
+                }
+            })
+            .state('tab.groups-detail', {
+                url: '/groups/:groupId',
+                views: {
+                    'tab-groups': {
+                        templateUrl: 'templates/group-details.html',
+											controller: 'GroupDetailCtrl'
                     }
                 }
             })

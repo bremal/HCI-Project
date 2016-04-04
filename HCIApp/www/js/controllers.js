@@ -192,14 +192,82 @@ angular.module('SimpleRESTIonic.controllers', [])
 		}])
 		
 		
-    .controller('ThingsToDoCtrl', function (BusinessModel, $scope, $rootScope) {
+    .controller('GroupCtrl', function (GroupModel, $stateParams, $state, $scope, $rootScope) {
+			$scope.vm = this;
+			$scope.categories = [{category: '', groups: []}];
+
+        function getAll() {
+           	GroupModel.all()
+                .then(function (result) {
+                    $scope.vm.data = result.data.data;
+										
+                });
+        }
+				//need to organize into the respective categories somehow...
+				function organizeCategory(group) {
+					var currentGroupCategory = group.category;
+					for(var i; i < $scope.categories.length; i++) {
+						if($scope.categories[i].category === currentGroupCategory) {
+							$scope.categories[i].groups.append(currentGroupCategory);
+							return;
+						}
+					}
+					$scope.categories.append({category: currentGroupCategory, groups: [group.name]});
+
+				}
+				
+				for(object in $scope.vm.data) {
+					organizeCategory(object);
+				}
+				
+				
+				$scope.viewDetails = function(object) {
+					
+					$state.go('tab.groups-detail', {'groupId': object.id});
+				}
+				
+				
+        $scope.vm.getAll = getAll;
+
+        getAll();
+    })
+		
+		.controller('GroupDetailCtrl', function (GroupModel, $stateParams, $state, $scope, $rootScope) {
+			$scope.group = this;
+      function fetchObject(id) {
+          GroupModel.fetch(id)
+              .then(function (result) {
+								$scope.group = result.data;
+								
+              });
+      }
+			fetchObject($stateParams.groupId);
+		})
+		
+		
+    .controller('ThingsToDoDetailCtrl', function (BusinessModel, $stateParams, $state, $scope, $rootScope) {
+			$scope.business = this;
+      function fetchObject(id) {
+          BusinessModel.fetch(id)
+              .then(function (result) {
+								$scope.business = result.data;
+								console.log($scope.business);
+              });
+      }
+			fetchObject($stateParams.businessId);
+			$scope.reviews = $scope.business.reviews;
+			console.log($scope.reviews);
+    })
+		
+		
+    .controller('ThingsToDoCtrl', function (BusinessModel, $state, $scope, $rootScope) {
 			$scope.vm = this;
 
         function getAll() {
            	BusinessModel.all()
                 .then(function (result) {
                     $scope.vm.data = result.data.data;
-										console.log($scope.vm.data);
+
                 });
         }
 				
@@ -207,6 +275,12 @@ angular.module('SimpleRESTIonic.controllers', [])
       	function clearData(){
             $scope.vm.data = null;
         }
+				
+				$scope.viewDetails = function(object) {
+					console.log(object.id);
+					
+					$state.go('tab.things-detail', {'businessId': object.id});
+				}
 
 
         $scope.vm.getAll = getAll;

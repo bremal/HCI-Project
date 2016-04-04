@@ -1,30 +1,27 @@
 <ion-view view-title="Groups">
     <ion-content class="padding has-header">
-				
-				<div class="list">
-
+		<div class="bar bar-header item-input-inset">
+	  	<label class="item-input-wrapper">
+	    	<i class="icon ion-ios7-search placeholder-icon"></i>
+	    	<input type="search" placeholder="Search" ng-model="searchText">
+	  	</label>
+	  	<button class="button button-clear">
+	   	 Cancel
+	  	</button>
+		</div>
+				<div class="list" ng-repeat="object in vm.data | filter:searchText" ng-click="viewDetails(object)">
+					
 				  <div class="item item-divider">
-				    Interest
+				    {{object.category}}
 				  </div>
 
 				  <a class="item" href="#">
-				    Group1
-				  </a>
-				  <a class="item" href="#">
-				    Group2
+				    {{object.name}}
 				  </a>
 					
-				  <div class="item item-divider">
-				    Interest2
-				  </div>
-					
-				  <a class="item" href="#">
-				    Group1
-				  </a>
-				  <a class="item" href="#">
-				    Group2
-				  </a>
 
 				</div>
+				
+				
 		</ion-content>
 </ion-view>
