@@ -1,8 +1,16 @@
 <ion-view view-title="Things to Do">
-	<search-bar ng-model="search"></search-bar>
+
      <ion-content class="has-header padding">
-				
-            <div class="list card" ng-repeat="object in vm.data|filter:search.txt" ng-click="viewDetails(object)">
+				<div class="bar bar-header item-input-inset">
+			  	<label class="item-input-wrapper">
+			    	<i class="icon ion-ios7-search placeholder-icon"></i>
+			    	<input type="search" placeholder="Search" ng-model="searchText">
+			  	</label>
+			  	<button class="button button-clear">
+			   	 Cancel
+			  	</button>
+				</div>
+            <div class="list card" ng-repeat="object in vm.data|filter:searchText" ng-click="viewDetails(object)">
 
                     <div class="item item-divider">{{object.name}}</div>
 										  <div class="item item-text-wrap">
