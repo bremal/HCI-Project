@@ -192,6 +192,59 @@ angular.module('SimpleRESTIonic.controllers', [])
 		}])
 		
 		
+    .controller('GroupCtrl', function (GroupModel, $stateParams, $state, $scope, $rootScope) {
+			$scope.vm = this;
+			$scope.categories = [{category: '', groups: []}];
+
+        function getAll() {
+           	GroupModel.all()
+                .then(function (result) {
+                    $scope.vm.data = result.data.data;
+										
+                });
+        }
+				//need to organize into the respective categories somehow...
+				function organizeCategory(group) {
+					var currentGroupCategory = group.category;
+					for(var i; i < $scope.categories.length; i++) {
+						if($scope.categories[i].category === currentGroupCategory) {
+							$scope.categories[i].groups.append(currentGroupCategory);
+							return;
+						}
+					}
+					$scope.categories.append({category: currentGroupCategory, groups: [group.name]});
+
+				}
+				
+				for(object in $scope.vm.data) {
+					organizeCategory(object);
+				}
+				
+				
+				$scope.viewDetails = function(object) {
+					
+					$state.go('tab.groups-detail', {'groupId': object.id});
+				}
+				
+				
+        $scope.vm.getAll = getAll;
+
+        getAll();
+    })
+		
+		.controller('GroupDetailCtrl', function (GroupModel, $stateParams, $state, $scope, $rootScope) {
+			$scope.group = this;
+      function fetchObject(id) {
+          GroupModel.fetch(id)
+              .then(function (result) {
+								$scope.group = result.data;
+								
+              });
+      }
+			fetchObject($stateParams.groupId);
+		})
+		
+		
     .controller('ThingsToDoDetailCtrl', function (BusinessModel, $stateParams, $state, $scope, $rootScope) {
 			$scope.business = this;
       function fetchObject(id) {
